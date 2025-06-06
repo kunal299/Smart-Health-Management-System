@@ -2,14 +2,27 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 
-const app = express();
+import { typeDefs } from "./schema.js";
+import { authResolver } from "./resolvers/authResolver.js";
+import { ApolloServer } from "apollo-server";
 
-app.use(express.json());
-
-app.get("/health", (req, res) => {
-  res.send("Auth service is up");
+const server = new ApolloServer({
+  typeDefs,
+  resolvers: authResolver,
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Running on port ${process.env.PORT || 3001}`);
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+  console.log(`🚀 Auth service running at ${url}`);
 });
+
+// const app = express();
+
+// app.use(express.json());
+
+// app.get("/health", (req, res) => {
+//   res.send("Auth service is up");
+// });
+
+// app.listen(process.env.PORT, () => {
+//   console.log(`Running on port ${process.env.PORT || 3001}`);
+// });
